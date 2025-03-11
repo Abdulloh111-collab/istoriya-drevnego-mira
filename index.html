@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Викторина по истории</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+        }
+        .quiz-container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Викторина по истории Древнего мира</h1>
+        <p id="question">Вопрос</p>
+        <div id="answers"></div>
+        <p id="result"></p>
+    </div>
+    <script>
+        const allQuestions = [
+            { question: "Как называлась первая письменность в истории?", answers: ["Кириллица", "Клинопись", "Иероглифы", "Латиница"], correct: 1 },
+            { question: "Какой фараон построил пирамиду Хеопса?", answers: ["Рамзес II", "Тутанхамон", "Хеопс", "Аменхотеп III"], correct: 2 },
+            { question: "Какой город был столицей Древнего Рима?", answers: ["Афины", "Спарта", "Карфаген", "Рим"], correct: 3 },
+            { question: "Как называлось государство, созданное Александром Македонским?", answers: ["Римская империя", "Египет", "Персия", "Македонская империя"], correct: 3 },
+            { question: "Кто считался богом солнца в Древнем Египте?", answers: ["Осирис", "Гор", "Ра", "Анубис"], correct: 2 },
+            { question: "Как назывался главный бог в пантеоне древнегреческих богов?", answers: ["Арес", "Зевс", "Аполлон", "Посейдон"], correct: 1 },
+            { question: "Где были проведены первые Олимпийские игры?", answers: ["Афины", "Олимпия", "Спарта", "Рим"], correct: 1 },
+            { question: "Как называлась система правления в Древнем Риме перед империей?", answers: ["Монархия", "Демократия", "Республика", "Тирания"], correct: 2 },
+            { question: "Как звали основателя Буддизма?", answers: ["Сократ", "Лао-цзы", "Сиддхартха Гаутама", "Конфуций"], correct: 2 },
+            { question: "Как называлось первое государство на территории Месопотамии?", answers: ["Вавилон", "Ассирия", "Шумер", "Персия"], correct: 2 },
+            { question: "Какое море омывало берега Древнего Египта?", answers: ["Красное", "Средиземное", "Черное", "Каспийское"], correct: 1 },
+            { question: "Кто основал город Рим?", answers: ["Ганнибал", "Ромул", "Цезарь", "Тарквиний"], correct: 1 },
+            { question: "Как называли правителей Древнего Египта?", answers: ["Цари", "Фараоны", "Консулы", "Императоры"], correct: 1 },
+            { question: "Какой знаменитый кодекс законов создал Хаммурапи?", answers: ["Законы Моисея", "Законы Солона", "Кодекс Хаммурапи", "Декларация прав человека"], correct: 2 },
+            { question: "Как называли воинов в Древней Спарте?", answers: ["Легионы", "Гоплиты", "Рыцари", "Самураи"], correct: 1 },
+            { question: "Какая цивилизация построила висячие сады Семирамиды?", answers: ["Греки", "Римляне", "Вавилоняне", "Египтяне"], correct: 2 },
+            { question: "Как называли совет старейшин в Древнем Риме?", answers: ["Форум", "Сенат", "Агора", "Синедрион"], correct: 1 },
+            { question: "Какое изобретение принадлежит китайцам?", answers: ["Папирус", "Компас", "Мозаика", "Арка"], correct: 1 },
+            { question: "Как называлась религия древних евреев?", answers: ["Буддизм", "Христианство", "Иудаизм", "Зороастризм"], correct: 2 },
+            { question: "Как называлась главная дорога в Древнем Риме?", answers: ["Аппиева дорога", "Шелковый путь", "Царская дорога", "Виа Сакра"], correct: 0 }
+        ];
+
+        const questions = allQuestions.sort(() => 0.5 - Math.random()).slice(0, 25);
+
+        let currentQuestion = 0;
+        const questionElement = document.getElementById("question");
+        const answersElement = document.getElementById("answers");
+        const resultElement = document.getElementById("result");
+
+        function loadQuestion() {
+            const q = questions[currentQuestion];
+            questionElement.textContent = q.question;
+            answersElement.innerHTML = "";
+
+            q.answers.forEach((answer, index) => {
+                const btn = document.createElement("button");
+                btn.classList.add("btn");
+                btn.textContent = answer;
+                btn.onclick = () => checkAnswer(index);
+                answersElement.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(index) {
+            if (index === questions[currentQuestion].correct) {
+                resultElement.textContent = "Правильно!";
+                resultElement.style.color = "green";
+            } else {
+                resultElement.textContent = "Неправильно!";
+                resultElement.style.color = "red";
+            }
+            
+            setTimeout(() => {
+                resultElement.textContent = "";
+                currentQuestion++;
+                if (currentQuestion < questions.length) {
+                    loadQuestion();
+                } else {
+                    questionElement.textContent = "Вы прошли викторину!";
+                    answersElement.innerHTML = "";
+                }
+            }, 1000);
+        }
+
+        loadQuestion();
+    </script>
+</body>
+</html>
